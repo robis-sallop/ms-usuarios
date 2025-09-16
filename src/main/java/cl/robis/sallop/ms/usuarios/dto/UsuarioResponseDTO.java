@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,6 +32,7 @@ public class UsuarioResponseDTO {
     @Schema(description = "Token JWT generado para el usuario")
     private String token;
     @Schema(description = "Indica si el usuario está activo", example = "true")
+    @JsonProperty("isactive")
     private boolean isactive;
     @Schema(description = "Lista de teléfonos del usuario")
     private List<TelefonoRequestDTO> phones;

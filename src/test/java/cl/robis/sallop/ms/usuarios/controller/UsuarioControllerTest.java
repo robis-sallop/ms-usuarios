@@ -11,8 +11,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import java.util.*;
 
+import java.util.Collections;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -91,5 +93,20 @@ public class UsuarioControllerTest {
                 .content(objectMapper.writeValueAsString(usuarioValido)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.mensaje").value("La clave no cumple con el formato requerido"));
+    }
+
+    @Test
+    void obtenerTodosUsuariosExitoso() throws Exception {
+        // Crear un usuario para que la lista no esté vacía
+        mockMvc.perform(post("/api/usuarios")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(usuarioValido)))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(get("/api/usuarios")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$[0].email").value("juan@rodriguez.org"));
     }
 }
