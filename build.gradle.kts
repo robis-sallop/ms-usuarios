@@ -3,6 +3,7 @@ plugins {
     id("org.springframework.boot") version "3.2.5"
     id("io.spring.dependency-management") version "1.1.4"
     id("jacoco")
+    id("pmd")
 }
 
 group = "cl.robis.sallop"
@@ -51,4 +52,18 @@ java {
 
 springBoot {
     mainClass.set("cl.robis.sallop.msusuarios.MsUsuariosApplication")
+}
+
+pmd {
+    toolVersion = "6.55.0"
+    isConsoleOutput = true
+    ruleSets = listOf()
+    ruleSetFiles = files("${rootProject.projectDir}/config/pmd/ruleset.xml")
+}
+
+tasks.withType<Pmd> {
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
 }
