@@ -2,6 +2,7 @@ package cl.robis.sallop.ms.usuarios.controller;
 
 import cl.robis.sallop.ms.usuarios.dto.UsuarioRequestDTO;
 import cl.robis.sallop.ms.usuarios.dto.UsuarioResponseDTO;
+import cl.robis.sallop.ms.usuarios.exception.UsuarioException;
 import cl.robis.sallop.ms.usuarios.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -52,5 +53,11 @@ public class UsuarioController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Collections.singletonMap("mensaje", e.getMessage()));
         }
+    }
+
+    @ExceptionHandler(UsuarioException.class)
+    public ResponseEntity<?> handleUsuarioException(UsuarioException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Collections.singletonMap("mensaje", ex.getMessage()));
     }
 }
