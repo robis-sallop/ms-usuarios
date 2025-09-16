@@ -1,0 +1,77 @@
+@startuml
+' Diagrama de clases principal para ms-usuarios
+
+package "Controller" {
+  class UsuarioController
+}
+
+package "Service" {
+  interface UsuarioService
+  class UsuarioServiceImpl
+}
+
+package "Repository" {
+  interface UsuarioRepository
+}
+
+package "Entities" {
+  class Usuario {
+    UUID id
+    String name
+    String email
+    String password
+    LocalDateTime created
+    LocalDateTime modified
+    LocalDateTime lastLogin
+    String token
+    boolean isactive
+    List<Telefono> phones
+  }
+  class Telefono {
+    Long id
+    String number
+    String citycode
+    String contrycode
+    Usuario usuario
+  }
+}
+
+package "DTOs" {
+  class UsuarioRequestDTO {
+    String name
+    String email
+    String password
+    List<TelefonoRequestDTO> phones
+  }
+  class UsuarioResponseDTO {
+    UUID id
+    String name
+    String email
+    LocalDateTime created
+    LocalDateTime modified
+    LocalDateTime lastLogin
+    String token
+    boolean isactive
+    List<TelefonoRequestDTO> phones
+  }
+  class TelefonoRequestDTO {
+    String number
+    String citycode
+    String contrycode
+  }
+}
+
+' Relaciones
+UsuarioController --> UsuarioService : usa
+UsuarioService <|.. UsuarioServiceImpl : implementa
+UsuarioServiceImpl --> UsuarioRepository : usa
+UsuarioRepository --> Usuario : maneja
+Usuario --> Telefono : tiene *
+Telefono --> Usuario : pertenece a
+UsuarioController --> UsuarioRequestDTO : recibe
+UsuarioController --> UsuarioResponseDTO : responde
+UsuarioRequestDTO --> TelefonoRequestDTO : tiene *
+UsuarioResponseDTO --> TelefonoRequestDTO : tiene *
+
+@enduml
+
